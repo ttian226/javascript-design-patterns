@@ -57,5 +57,42 @@ var b = Singleton.getInstance("sven2");
 console.log(a === b);	//true
 b.getName();	//sven1
 ```
-以上两段代码执行结果完全相同。
+* 以上两段代码都不用显示的new一个对象。增加类的不透明性，Singleton类的使用者必须知道这是一个单例类
+* 两段代码的意义并不大
+
+#### Example3
+
+```javascript
+var Create = (function () {
+    var instance;
+
+    var CreateDiv = function (html) {
+        if (instance) {
+            return instance;
+        }
+        this.html = html;
+        this.init();
+        return instance = this;
+    };
+
+    CreateDiv.prototype.init = function () {
+        var div = document.createElement("div");
+        div.innerHTML = this.html;
+        document.body.appendChild(div);
+    };
+
+    return CreateDiv;
+})();
+
+
+var a = new Create("sven1");
+var b = new Create("sven2");
+
+console.log(a === b);   //true
+```
+
+需要显示new对象，结果是只创建了一个dom对象：<div>sven1</div>
+
+缺点：
+* 使用自执行的匿名函数和闭包，让这个匿名函数返回真正的Singleton构造方法，增加了程序的复杂度，阅读起来不舒服
 
