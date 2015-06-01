@@ -98,4 +98,38 @@ console.log(a === b);   //true
 ```
 
 * 使用自执行的匿名函数和闭包，让这个匿名函数返回真正的Singleton构造方法，增加了程序的复杂度，阅读起来不舒服
+* CreateDiv的够着函数实际上负责了两件事情，第一是创建对象和执行init方法，第二是保证只有一个对象。
 
+#### Example4
+
+```javascript
+var CreateDiv = function (html) {
+    this.html = html;
+    this.init();
+};
+
+CreateDiv.prototype.init = function () {
+    var div = document.createElement("div");
+    div.innerHTML = this.html;
+    document.body.appendChild(div);
+};
+
+var ProxySingletonCreateDiv = (function () {
+    var instance;
+
+    return function (html) {
+        if (!instance) {
+            instance = new CreateDiv(html);
+        }
+        return instance;
+    };
+})();
+
+var a = new ProxySingletonCreateDiv("sven1");
+var b = new ProxySingletonCreateDiv("sven2");
+
+console.log(a === b);   //true
+```
+
+* 把负责管理单例的逻辑移到了代理类ProxySingletonCreateDiv中
+* CreateDiv变成了一个普通的类，它和代理类组合起来达到了单例的效果。
