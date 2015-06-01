@@ -91,8 +91,11 @@ var b = new Create("sven2");
 console.log(a === b);   //true
 ```
 
-需要显示new对象，结果是只创建了一个dom对象：<div>sven1</div>
+需要显示new对象，结果是只创建了一个dom对象:
 
-缺点：
+```html
+<div>sven1</div>
+```
+
 * 使用自执行的匿名函数和闭包，让这个匿名函数返回真正的Singleton构造方法，增加了程序的复杂度，阅读起来不舒服
 
