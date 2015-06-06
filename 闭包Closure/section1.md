@@ -152,3 +152,40 @@ fn1();  //2
 fn2();  //2
 fn2();  //3
 ```
+
+#### Example4
+
+```javascript
+var arr = [1, 2, 3];
+
+// 用来存放函数的数组
+var fns = [];
+
+var add = function () {
+    for (var i = 0; i < arr.length; i++) {
+        (function (i) {
+            // 把匿名函数push到fns中
+            fns.push(function () {
+                // 由于函数引用了上层作用域链的i，当被调用时i值不会被改变
+                console.log(arr[i]);
+            });
+        })(i);
+    }
+};
+
+// 遍历fns执行数组中的函数
+var start = function () {
+    for (var i = 0; i < fns.length; i++) {
+        // 执行fns中的匿名函数
+        fns[i]();
+    }
+};
+
+add();
+start();
+
+// output
+// 1
+// 2
+// 3
+```
