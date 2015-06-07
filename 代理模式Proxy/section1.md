@@ -28,12 +28,15 @@ var proxyImage = (function () {
 	var img = new Image();
 
 	img.onload = function () {
+		// load完成后会再次调用本体对象的setSrc接口设置src
 		myImage.setSrc(this.src);
 	};
 
 	return {
 		setSrc: function (src) {
+			// 调用本体对象的setSrc接口设置预加载图片
 			myImage.setSrc("lazy3.png");
+			// 设置Image对象的src属性，会触发Image对象的onload事件
 			img.src = src;
 		}
 	};
