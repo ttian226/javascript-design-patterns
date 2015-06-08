@@ -46,7 +46,7 @@ var proxyImage = (function () {
 proxyImage.setSrc("http://fabu.07073.com/uploads/images/37edc91dfe0b5906841ee4365444c869.jpg");
 ```
 
-#### 不适用代理模式
+#### 不使用代理模式
 
 ```javascript
 var MyImage = (function () {
