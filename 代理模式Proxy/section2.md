@@ -113,7 +113,8 @@ for (var i = 0; i < checkbox.length; i++) {
         if (this.checked === true) {
             // 勾选上的同时会开启一个计时器
             // 把已勾选的id放入缓存
-            // 每隔2秒读取一次缓存数组并转换成用逗号分隔的字符串
+            // 每隔2秒读取一次缓存数组并转换成用逗号分隔的字符串，同时清空缓存和计时器
+            // 如果计时器已经开启则返回
             proxySynchronousFile(this.id);
         }
     };
