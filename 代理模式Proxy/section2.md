@@ -68,6 +68,7 @@ for (var i = 0; i < checkbox.length; i++) {
 	var c = checkbox[i];
 	c.onclick = function () {
 		if (this.checked === true) {
+            // 这里每勾选一次checkbox就会给服务端发送一次请求
 			synchronousFile(this.id);
 		}
 	};
@@ -100,7 +101,7 @@ var proxySynchronousFile = (function() {
             clearTimeout(timer);
             timer = null;
             cache.length = 0;
-        }, 5000);
+        }, 2000);
     };
 })();
 
@@ -110,6 +111,9 @@ for (var i = 0; i < checkbox.length; i++) {
     var c = checkbox[i];
     c.onclick = function() {
         if (this.checked === true) {
+            // 勾选上的同时会开启一个计时器
+            // 把已勾选的id放入缓存
+            // 每隔2秒读取一次缓存数组并转换成用逗号分隔的字符串
             proxySynchronousFile(this.id);
         }
     };
