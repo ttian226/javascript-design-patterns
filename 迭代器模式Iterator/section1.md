@@ -125,6 +125,7 @@ if (value === false) {
 var each = function(arr, callback) {
     for (var i = 0; i < arr.length; i++) {
         var value = callback.call(arr[i], i, arr[i]);
+        // 如果callback返回值为false，强制跳出循环
         if (value === false) {
             break;
         }
