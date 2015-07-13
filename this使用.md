@@ -62,7 +62,7 @@ console.log(name);  //'globalName'
 ```javascript
 window.id = 'winid';
 
-// click事件需要在div节点生成后调用。
+// 注：click事件需要在div节点生成后调用。
 document.getElementById('div1').onclick = function() {
     // 在这里this指向div节点
     console.log(this.id);   //'div1'
@@ -81,4 +81,55 @@ document.getElementById('div1').onclick = function() {
     };
     callback();
 };
+```
+
+#### 构造器调用
+
+Javascript可以从构造器中创建对象。当用`new`运算符调用函数时，该函数会返回一个对象。通常情况下，构造器里的`this`就指向这个返回的对象。
+
+例1：
+
+```javascript
+var MyClass = function() {
+    this.name = 'wangxu';
+};
+
+var obj = new MyClass();
+var name = obj.name;
+console.log(name);  //'wangxu'
+```
+
+例2：
+
+```javascript
+// 构造器显式的返回一个对象
+var MyClass = function() {
+    this.name = 'wangxu';
+    return {
+        name: 'tiantian'
+    };
+};
+
+var obj = new MyClass();
+
+// 这里的obj.name不是this.name，而是返回对象的name
+var name = obj.name;
+console.log(name);
+```
+
+例3：
+
+```javascript
+var MyClass = function() {
+    this.name = 'wangxu';
+    return {
+        age: 35
+    };
+};
+
+var obj = new MyClass();
+
+// 由于返回的对象没有name属性，所以obj.name返回undefined
+var name = obj.name;
+console.log(name);  //undefined
 ```
