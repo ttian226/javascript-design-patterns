@@ -51,3 +51,34 @@ var name = getName();
 console.log(name);  //'globalName'
 ```
 
+例子3：
+
+```html
+<body>
+    <div id="div1">div1</div>
+</body>
+```
+
+```javascript
+window.id = 'winid';
+
+// click事件需要在div节点生成后调用。
+document.getElementById('div1').onclick = function() {
+    // 在这里this指向div节点
+    console.log(this.id);   //'div1'
+
+    // 创建that保存div节点的引用，目的是在callback中使用。
+    var that = this;
+
+    // callback函数中的this指向windows对象
+    var callback = function() {
+
+        // 由于this指向windows，this.id = winid
+        console.log(this.id);   //'winid'
+
+        // 通过that访问到div节点的id
+        console.log(that.id);
+    };
+    callback();
+};
+```
