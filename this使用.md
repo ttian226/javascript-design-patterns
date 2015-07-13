@@ -133,3 +133,26 @@ var obj = new MyClass();
 var name = obj.name;
 console.log(name);  //undefined
 ```
+
+#### `Function.prototype.call`或`Function.prototype.apply`调用
+
+通过`Function.prototype.call`或`Function.prototype.apply`可以动态的改变传入函数的this。
+
+```javascript
+var obj1 = {
+    name: 'wangxu',
+    getName: function() {
+        return this.name;
+    }
+};
+
+var obj2 = {
+    name: 'tiantian'
+};
+
+var name1 = obj1.getName();
+console.log(name1);     //'wangxu'
+
+var name2 = obj1.getName.apply(obj2);
+console.log(name2);     //'tiantian'
+```
