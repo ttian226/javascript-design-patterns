@@ -156,3 +156,21 @@ console.log(name1);     //'wangxu'
 var name2 = obj1.getName.apply(obj2);
 console.log(name2);     //'tiantian'
 ```
+
+
+```javascript
+document.getElementById = (function(func) {
+    return function() {
+        return func.apply(document, arguments);
+    };
+})(document.getElementById);
+
+var getId = document.getElementById;
+
+document.addEventListener('DOMContentLoaded', complete, false);
+
+function complete(e) {
+    var div = getId('div1');
+    console.log(div);
+}
+```
