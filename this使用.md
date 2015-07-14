@@ -157,15 +157,35 @@ var name2 = obj1.getName.apply(obj2);
 console.log(name2);     //'tiantian'
 ```
 
+一个例子：
+
+*执行`getId()`会抛出异常，原因是一些浏览器引擎`document.getElementById`方法内部需要`this`，这个`this`是被期望指向`document`。当`getElementById`作为`document`对象属性被调用时，方法内部`this`是指向`document的`。当`getId`引用了`document.getElementById`后，内部`this`指向了`window`而不是`document`*
 
 ```javascript
-document.getElementById = (function(func) {
+var getId = document.getElementById;
+
+document.addEventListener('DOMContentLoaded', complete, false);
+
+function complete(e) {
+    // 执行到这里会抛出异常
+    var div = getId('div1');
+    console.log(div);
+}
+```
+
+通过`apply`修正上下文：
+
+```javascript
+// 创建立即执行函数，getElementById指向匿名函数
+var getElementById = (function(func) {
     return function() {
+        // 把document对象作为上下文传给document.getElementById。使其在方法内部this对象始终指向document对象
         return func.apply(document, arguments);
     };
 })(document.getElementById);
 
-var getId = document.getElementById;
+// getId引用getElementById，即getId也引用了匿名函数。
+var getId = getElementById;
 
 document.addEventListener('DOMContentLoaded', complete, false);
 
