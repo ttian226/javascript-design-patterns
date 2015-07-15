@@ -72,3 +72,28 @@ document.getElementById('div1').onclick = function() {
 };
 ```
 
+例：借用其它对象的方法
+
+```javascript
+// 函数内部的arguments是类数组对象
+function test() {
+    console.log(arguments);     //[1, 2]
+    console.log(arguments instanceof Array);    //false
+
+    // 这里如果直接调用push方法会报错，因为arguments对象没有原型方法push
+    //arguments.push(3);
+}
+
+test(1, 2);
+```
+
+```javascript
+function test() {
+    Array.prototype.push.call(arguments, 3);
+    console.log(arguments);     //[1, 2, 3]
+}
+
+test(1, 2);
+```
+
+
