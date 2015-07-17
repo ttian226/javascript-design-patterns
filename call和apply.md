@@ -125,3 +125,50 @@ var name = func();
 console.log(name);  //'wangxu'
 ```
 
+例子：模拟`Function.prototype.bind`，并对参数做些处理
+
+```javascript
+// 创建原型方法bindEx
+Function.prototype.bindEx = function() {
+    // 创建self变量保存this对象
+    var self = this,
+
+        // 从arguments中取第一个参数作为上下文对象
+        context = [].shift.call(arguments),
+
+        // 去剩余的部分作为参数数组
+        args = [].slice.call(arguments);
+
+    // 返回一个新的函数
+    return function() {
+        // newArr来保存新函数的参数数组
+        var newArr = [].slice.call(arguments);
+
+        // 合并原函数参数数组到argArr
+        var argArr = args.concat(newArr);
+
+        // 用context对象来修正函数内部的this
+        return self.apply(context, argArr);
+    };
+};
+
+window.name = 'win';
+
+var obj = {
+    name: 'wangxu'
+};
+
+function getName(a, b, c, d) {
+    var arr = [a, b, c, d];
+    console.log(this.name);
+    console.log(arr);
+}
+
+var func = getName.bindEx(obj, 1, 2);
+func(3, 4);
+
+// output
+// 'wangxu'
+// [1, 2, 3, 4]
+```
+
