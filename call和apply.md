@@ -96,4 +96,32 @@ function test() {
 test(1, 2);
 ```
 
+例子：模拟`Function.prototype.bind`
+
+```javascript
+// 创建原型方法bindEx
+Function.prototype.bindEx = function(context) {
+    // 创建self变量保存this对象
+    var self = this;
+
+    // 返回一个新的函数
+    return function() {
+        // 用context对象来修正函数内部的this
+        return self.apply(context, arguments);
+    };
+};
+
+// 使用bindEx
+var obj = {
+    name: 'wangxu'
+};
+
+function getName() {
+    return this.name;
+}
+
+var func = getName.bindEx(obj);
+var name = func(); 
+console.log(name);  //'wangxu'
+```
 
