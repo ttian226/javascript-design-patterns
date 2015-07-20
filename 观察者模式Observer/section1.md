@@ -47,3 +47,62 @@ newsPoster.trigger('sports news', 'some contents...');
 // xiaoWang receive: [title]sports news [content]some contents...
 ```
 
+以上的例子模拟了一个简单的发布-订阅模式，当仍存在问题：*无论发布什么新闻，订阅者都会收到相同的新闻*，现在的需求是订阅者只会收到自己喜欢的新闻。
+
+例子：修改发布-订阅模型
+
+```javascript
+var newsPoster = {};  //定义新闻发布对象
+
+newsPoster.orderlist = [];   //缓存列表，存放订阅者的回调函数
+
+// 订阅新闻
+newsPoster.order = function(key, fn) {
+    if (!this.orderlist[key]) {
+        this.orderlist[key] = [];
+    }
+    this.orderlist[key].push(fn);
+};
+
+// 发布新闻
+newsPoster.trigger = function() {
+    var key = Array.prototype.shift.call(arguments),    //取出第一个参数，作为key
+        fns = this.orderlist[key];  //对应key的缓存函数列表
+
+    // 如果没有订阅函数则返回
+    if (!fns || fns.length === 0) {
+        return false;
+    }
+
+    // 遍历缓存列表执行订阅函数
+    for (var i = 0; i < fns.length; i++) {
+        fns[i].apply(this, arguments);
+    }
+};
+```
+
+测试代码：
+
+```javascript
+// 小李订阅函数
+var xiaoLiOrder = function(title, content) {
+    console.log('xiaoli receive: [title]' + title + ' [content]' + content);
+};
+
+// 小王订阅函数
+var xiaoWangOrder = function(title, content) {
+    console.log('xiaoWang receive: [title]' + title + ' [content]' + content);
+};
+
+// 订阅新闻，把函数分别添加到缓存列表
+newsPoster.order('sport', xiaoLiOrder);     // 小李订阅体育新闻
+newsPoster.order('tech', xiaoWangOrder);   // 小王订阅科技新闻
+
+newsPoster.trigger('sport', 'sports news', 'some contents...'); // 发布一条体育新闻
+newsPoster.trigger('tech', 'tech news', 'some contents...');  // 发布一条科技新闻
+
+// output
+// xiaoli receive: [title]sports news [content]some contents...
+// xiaoWang receive: [title]tech news [content]some contents...
+```
+
