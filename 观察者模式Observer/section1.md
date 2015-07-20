@@ -106,3 +106,77 @@ newsPoster.trigger('tech', 'tech news', 'some contents...');  // 发布一条科
 // xiaoWang receive: [title]tech news [content]some contents...
 ```
 
+#### 把发布订阅模式抽象出来
+
+对上面的例子的改进版：把发布订阅模块抽象到一个observer对象中
+
+```javascript
+// 发布订阅模块
+var observer = {
+    // 缓存列表
+    orderlist: [],
+    // 订阅方法
+    order: function(key, fn) {
+        if (!this.orderlist[key]) {
+            this.orderlist[key] = [];
+        }
+        this.orderlist[key].push(fn);
+    },
+    // 发布方法
+    trigger: function() {
+        var key = Array.prototype.shift.call(arguments),
+            fns = this.orderlist[key];
+
+        if (!fns || fns.length === 0) {
+            return false;
+        }
+
+        for (var i = 0; i < fns.length; i++) {
+            fns[i].apply(this, arguments);
+        }
+    }
+};
+
+// 安装发布-订阅功能，把observer属性依次赋予新对象
+var installEvent = function(obj) {
+    for (var i in observer) {
+        if (observer.hasOwnProperty(i)) {
+            obj[i] = observer[i];
+        }
+    }
+};
+```
+
+模块的使用：
+
+```javascript
+// 创建一个新的新闻发布对象newsPoster
+var newsPoster = {};
+
+// 给newsPoster对象安装发布-订阅功能
+installEvent(newsPoster);
+
+// 下面代码同上
+
+// 小李订阅函数
+var xiaoLiOrder = function(title, content) {
+    console.log('xiaoli receive: [title]' + title + ' [content]' + content);
+};
+
+// 小王订阅函数
+var xiaoWangOrder = function(title, content) {
+    console.log('xiaoWang receive: [title]' + title + ' [content]' + content);
+};
+
+// 订阅新闻，把函数分别添加到缓存列表
+newsPoster.order('sport', xiaoLiOrder);     // 小李订阅体育新闻
+newsPoster.order('tech', xiaoWangOrder);   // 小王订阅科技新闻
+
+newsPoster.trigger('sport', 'sports news', 'some contents...'); // 发布一条体育新闻
+newsPoster.trigger('tech', 'tech news', 'some contents...');  // 发布一条科技新闻
+
+// output
+// xiaoli receive: [title]sports news [content]some contents...
+// xiaoWang receive: [title]tech news [content]some contents...
+```
+
