@@ -180,3 +180,40 @@ newsPoster.trigger('tech', 'tech news', 'some contents...');  // 发布一条科
 // xiaoWang receive: [title]tech news [content]some contents...
 ```
 
+#### 取消订阅
+
+```javascript
+observer.remove = function() {
+    var fns = this.orderlist[key];
+
+    // key对应的消息没有被订阅，直接返回
+    if (!fns) {
+        return false;
+    }
+
+    // 不传fn，表示取消key对应消息的所有订阅
+    if (!fn) {
+        fns && (fns.length = 0);
+    } else {
+        for (var i = 0; i < fns.length; i++) {
+            var _fn = fns[i];
+            if (_fn === fn) {
+                fns.splice(i, 1);   //删除订阅者的回调函数
+            }
+        }
+    }
+};
+```
+
+测试代码：
+
+```javascript
+// 小李取消订阅
+newsPoster.remove('sport', xiaoLiOrder);
+
+newsPoster.trigger('sport', 'sports news', 'some contents...'); // 发布一条体育新闻
+newsPoster.trigger('tech', 'tech news', 'some contents...');  // 发布一条科技新闻
+
+// output
+// xiaoWang receive: [title]tech news [content]some contents...
+```
