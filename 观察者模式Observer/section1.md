@@ -183,7 +183,7 @@ newsPoster.trigger('tech', 'tech news', 'some contents...');  // 发布一条科
 #### 取消订阅
 
 ```javascript
-observer.remove = function() {
+observer.remove = function(key, fn) {
     var fns = this.orderlist[key];
 
     // key对应的消息没有被订阅，直接返回
