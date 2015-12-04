@@ -172,5 +172,16 @@ func(3, 4);
 // [1, 2, 3, 4]
 ```
 
+#### 利用Array.prototype.concat抹平嵌套的数组
+
+```javascript
+var arr1 = [];
+var arr2 = [1, 2];
+var arr3 = [[1, 2]];
+arr1.concat(arr2); //[1, 2]
+arr1.concat(arr3); //[[1, 2]]
+Array.prototype.concat.apply(arr1, arr2); //[1, 2] 等价于arr1.concat(1, 2)
+Array.prototype.concat.apply(arr1, arr3); //[1, 2] 等价于arr1.concat([1, 2])
+```
 
 
